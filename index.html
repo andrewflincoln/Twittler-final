@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+    <link rel="stylesheet" href="twittlerStyles.css">
+  </head>
+  <header> '' </header>
+  <body>
+
+    <div id="feed"></div>
+    <script>
+      $(document).ready(function(){
+
+        
+        
+        function home() {  
+         // const homeInt = setInterval(home, 5000);
+          window.scrollTo(0, 0);
+          var $header = $('header');
+          $header.html('<h1>It\'s Twittler!</h1> <button id="refreshHome" class="navb">latest twittles</button>');
+          var $refreshHome = $('#refreshHome');
+          $refreshHome.click(function() { home(); });
+
+          var $feed = $('#feed');
+          $feed.html('');
+
+          var index = streams.home.length - 1;  
+     
+          while(index >= 0){
+            var tweet = streams.home[index];
+            var $tweet = $('<div class="tweet"></div>');
+
+            var dt = new Date();
+            var utcDate = dt.toUTCString();    
+            if (!tweet.date) {
+              tweet['date'] = utcDate;        
+            }
+            if (tweet.user == "sharksforcheap") {    
+              $tweet.html('<button class="toSharky"> @' + tweet.user + '</button> ' + tweet.message + '<br><h5>' + tweet.date + '</h5>');
+              var $toSharky = $('.toSharky');
+              $toSharky.click(function() { dispUserTweets("sharksforcheap"); });
+
+            }
+            if (tweet.user == "mracus") {    
+              $tweet.html('<button class="toAcus"> @' + tweet.user + '</button> ' + tweet.message + '<br><h5>' + utcDate + '</h5>');
+              var $toAcus = $('.toAcus');
+              $toAcus.click(function() { dispUserTweets("mracus"); });
+            }
+            if (tweet.user == "shawndrost") {    
+              $tweet.html('<button class="toDrost"> @' + tweet.user + '</button> ' + tweet.message + '<br><h5>' + utcDate + '</h5>');
+              var $toDrost = $('.toDrost');
+              $toDrost.click(function() { dispUserTweets("shawndrost"); });
+            }
+            if (tweet.user == "douglascalhoun") {    
+              $tweet.html('<button class="toDoug"> @' + tweet.user + '</button> ' + tweet.message + '<br><h5>' + utcDate + '</h5>');
+              var $toDoug = $('.toDoug');
+              $toDoug.click(function() { dispUserTweets("douglascalhoun"); });
+            }
+            
+    
+            $tweet.appendTo($feed);
+            index -= 1;
+            
+          }
+        }
+
+/*/////// DISP USER TWEETS  A single function for all?! ============================================*/
+
+
+        function dispUserTweets(userName) {
+          var curTweets = streams.users[userName];
+          window.scrollTo(0, 0);
+          var $header = $('header');
+          $header.html('<h1> @' + userName + '</h1> <button id="backb" class="navb">back home </button> | <button id="refb" class="navb">latest from @' + userName + '</button>');
+
+          var $backb = $('#backb');
+          $backb.click(function() { home(); });
+          var $refb = $('#refb');
+          $refb.click(function() { dispUserTweets(userName); });
+
+          var $feed = $('#feed');
+          $feed.html('')
+          var index = curTweets.length - 1;
+
+          while(index >= 0){
+            
+            
+            var tweet = curTweets[index];
+            var $tweet = $('<div class="tweet"></div>');
+            var dt = new Date();
+            var utcDate = dt.toUTCString(); 
+            if (!tweet.date) {
+              tweet['date'] = utcDate;  
+            }
+            $tweet.html('<button> @' + userName + '</button> ' + tweet.message + '<br><h5>' + tweet.date + '</h5>');
+            $tweet.appendTo($feed); 
+            index -= 1;
+            
+          }
+        }
+/*-==========================-----------------------------------======================================*/
+        home(); //our start page/first executed funtion
+
+      });
+     
+    </script>
+ 
+  </body>
+</html>
